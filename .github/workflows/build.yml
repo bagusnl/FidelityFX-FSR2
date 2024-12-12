@@ -1,0 +1,40 @@
+name: Build DLL
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Prepare Vulkan SDK
+      uses: humbletim/setup-vulkan-sdk@v1.2.0
+      with:
+        vulkan-query-version: latest
+        vulkan-components: Vulkan-Headers, Vulkan-Loader
+        vulkan-use-cache: true
+
+    - name: Run build
+      run: |
+        cmd .\build\GenerateSolutionsDLL.bat
+    
+    - name: Upload Artifact (Vulkan)
+      uses: actions/upload-artifact@v4.3.1
+      with:
+          name: fsr2_vk_${{ github.sha }}
+          path: ./VK
+          compression-level: 9
+    
+    - name: Upload Artifact (DX12)
+      uses: actions/upload-artifact@v4.3.1
+      with:
+          name: fsr2_dx12_${{ github.sha }}
+          path: ./DX12
+          compression-level: 9
+    
