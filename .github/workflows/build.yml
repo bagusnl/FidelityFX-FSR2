@@ -23,19 +23,21 @@ jobs:
 
     - name: Run build
       shell: cmd
-      run: .\build\GenerateSolutionsDLL.bat
+      run: |
+        cd .\build
+        .\GenerateSolutionsDLL.bat
     
     - name: Upload Artifact (Vulkan)
       uses: actions/upload-artifact@v4.3.1
       with:
           name: fsr2_vk_${{ github.sha }}
-          path: ./VK
+          path: ./build/VK
           compression-level: 9
     
     - name: Upload Artifact (DX12)
       uses: actions/upload-artifact@v4.3.1
       with:
           name: fsr2_dx12_${{ github.sha }}
-          path: ./DX12
+          path: ./build/DX12
           compression-level: 9
     
