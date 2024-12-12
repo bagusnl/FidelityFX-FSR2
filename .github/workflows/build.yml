@@ -30,12 +30,12 @@ jobs:
     - name: Run build (VK)
       run: |
         cmake -A x64 -S . -B build/VK -DGFX_API=vk
-        cmake --build build/VK --config Release ---parallel 4 -- /p:CL_MPcount=16
+        cmake --build build/VK --config Release --parallel 4 -- /p:CL_MPcount=16
 
     - name: Run build (VK)
       run: |
         cmake -A x64 -S . -B build/DX12 -DGFX_API=DX12
-        cmake --build build/DX12 --config Release ---parallel 4 -- /p:CL_MPcount=16
+        cmake --build build/DX12 --config Release --parallel 4 -- /p:CL_MPcount=16
 
     - name: Upload Artifact (Vulkan Solution)
       uses: actions/upload-artifact@v4.3.1
