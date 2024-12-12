@@ -21,23 +21,41 @@ jobs:
         vulkan-components: Vulkan-Headers, Vulkan-Loader
         vulkan-use-cache: true
 
-    - name: Run build
+    - name: Run solution generator
       shell: cmd
       run: |
         cd .\build
         .\GenerateSolutionsDLL.bat
-    
-    - name: Upload Artifact (Vulkan)
+
+    - name: Run build (VK)
+      run: |
+        cmake -A x64 -S . -B build/VK -DGFX_API=vk
+        cmake --build build/VK --config Release ---parallel 4 -- /p:CL_MPcount=16
+
+    - name: Run build (VK)
+      run: |
+        cmake -A x64 -S . -B build/DX12 -DGFX_API=DX12
+        cmake --build build/DX12 --config Release ---parallel 4 -- /p:CL_MPcount=16
+
+    - name: Upload Artifact (Vulkan Solution)
       uses: actions/upload-artifact@v4.3.1
       with:
-          name: fsr2_vk_${{ github.sha }}
+          name: fsr2_sol-vk_${{ github.sha }}
           path: ./build/VK
           compression-level: 9
     
-    - name: Upload Artifact (DX12)
+    - name: Upload Artifact (DX12 Solution)
       uses: actions/upload-artifact@v4.3.1
       with:
-          name: fsr2_dx12_${{ github.sha }}
+          name: fsr2_sol-dx12_${{ github.sha }}
           path: ./build/DX12
           compression-level: 9
+
+    - name: Upload Artifact (Binaries)
+      uses: actions/upload-artifact@v4.3.1
+      with: 
+         name: fsr2_bin_${{ github.sha }}
+         path: ./bin
+         compression-level: 9
+
     
