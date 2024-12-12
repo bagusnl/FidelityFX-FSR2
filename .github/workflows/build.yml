@@ -9,6 +9,12 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - name: Cache git folder
+      uses: actions/cache@v3
+      with:
+        path: D:/a/FidelityFX-FSR2/FidelityFX-FSR2/.git
+        key: git-folder
+
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -32,7 +38,7 @@ jobs:
         cmake -A x64 -S . -B build/VK -DGFX_API=vk
         cmake --build build/VK --config Release --parallel 4 -- /p:CL_MPcount=16
 
-    - name: Run build (VK)
+    - name: Run build (DX12)
       run: |
         cmake -A x64 -S . -B build/DX12 -DGFX_API=DX12
         cmake --build build/DX12 --config Release --parallel 4 -- /p:CL_MPcount=16
